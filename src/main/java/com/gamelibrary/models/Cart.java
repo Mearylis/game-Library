@@ -9,6 +9,7 @@ public class Cart {
         this.gameId = gameId;
     }
 
+
     public int getUserId() {
         return userId;
     }
