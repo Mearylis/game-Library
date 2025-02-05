@@ -50,11 +50,9 @@ public class Database {
         gameRepository.addGame(new Game(1, "Game 1", 2, 29.99, LocalDate.now(), true));
         gameRepository.addGame(new Game(2, "Game 2", 2, 39.99, LocalDate.now(), false));
     }
-
     public GameRepository getGameRepository() {
         return gameRepository;
     }
-
     public UserRepository getUserRepository() {
         return userRepository;
     }
