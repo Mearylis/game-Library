@@ -20,5 +20,10 @@
             <version>2.2.224</version> <!-- Убедитесь, что версия актуальна -->
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
     </dependencies>
 </project>

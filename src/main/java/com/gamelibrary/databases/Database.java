@@ -25,7 +25,8 @@ public class Database {
 
     private void initialize() {
         try {
-            connection = DriverManager.getConnection("jdbc:h2:mem:gamelibrary;DB_CLOSE_DELAY=-1", "sa", "");
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/gamelibrary", "postgres", "1234");
             createTables();
             populateData();
         } catch (SQLException e) {
@@ -35,10 +36,36 @@ public class Database {
 
     private void createTables() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute("CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), role VARCHAR(255), balance DOUBLE, banned BOOLEAN)");
-            stmt.execute("CREATE TABLE IF NOT EXISTS games (id INT PRIMARY KEY, name VARCHAR(255), developerId INT, price DOUBLE, creationDate DATE, approved BOOLEAN)");
-            stmt.execute("CREATE TABLE IF NOT EXISTS carts (userId INT, gameId INT)");
-            stmt.execute("CREATE TABLE IF NOT EXISTS purchases (id INT PRIMARY KEY, userId INT, gameId INT, purchaseDate DATE)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "username VARCHAR(255) UNIQUE NOT NULL, " +
+                    "password VARCHAR(255) NOT NULL, " +
+                    "role VARCHAR(50) NOT NULL, " +
+                    "balance DECIMAL(10,2) DEFAULT 0.00, " +
+                    "banned BOOLEAN DEFAULT FALSE" +
+                    ")");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS games (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "name VARCHAR(255) NOT NULL, " +
+                    "developerId INT REFERENCES users(id) ON DELETE CASCADE, " +
+                    "price DECIMAL(10,2) DEFAULT 0.00, " +
+                    "creationDate DATE DEFAULT CURRENT_DATE, " +
+                    "approved BOOLEAN DEFAULT FALSE" +
+                    ")");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS carts (" +
+                    "userId INT REFERENCES users(id) ON DELETE CASCADE, " +
+                    "gameId INT REFERENCES games(id) ON DELETE CASCADE, " +
+                    "PRIMARY KEY (userId, gameId)" +
+                    ")");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS purchases (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "userId INT REFERENCES users(id) ON DELETE CASCADE, " +
+                    "gameId INT REFERENCES games(id) ON DELETE CASCADE, " +
+                    "purchaseDate DATE DEFAULT CURRENT_DATE" +
+                    ")");
         }
     }
 
@@ -50,9 +77,11 @@ public class Database {
         gameRepository.addGame(new Game(1, "Game 1", 2, 29.99, LocalDate.now(), true));
         gameRepository.addGame(new Game(2, "Game 2", 2, 39.99, LocalDate.now(), false));
     }
+
     public GameRepository getGameRepository() {
         return gameRepository;
     }
+
     public UserRepository getUserRepository() {
         return userRepository;
     }
