@@ -7,7 +7,7 @@ public class User {
     private Role role;
     private double balance;
     private boolean banned;
-    private String bankAccount; // New field for bank account details
+    private String bankAccount;
 
     public User(int id, String username, String password, Role role, double balance, boolean banned) {
         this.id = id;
@@ -31,27 +31,22 @@ public class User {
     public void setBanned(boolean banned) { this.banned = banned; }
     public void setBankAccount(String bankAccount) { this.bankAccount = bankAccount; }
 
-    // Top-up balance applying fee based on bank account type:
-    // - 16-digit number: Mastercard (5% fee)
-    // - Starts with "KZ" and longer than 16 characters: Kaspi (10% fee)
+    public boolean deductBalance(double amount) {
+        if (balance < amount) {
+            System.out.println("Insufficient balance. Current balance: $" + balance);
+            return false;
+        }
+        balance -= amount;
+        System.out.println("Deducted $" + amount + ". Remaining balance: $" + balance);
+        return true;
+    }
+
     public void topUpBalance(double amount) {
-        if (bankAccount == null || bankAccount.isEmpty()) {
-            System.out.println("No bank account linked.");
+        if (amount <= 0) {
+            System.out.println("Invalid top-up amount. Must be positive.");
             return;
         }
-        double fee = 0;
-        if (bankAccount.matches("\\d{16}")) { // Matches exactly 16 digits → Mastercard
-            fee = 0.05;
-            System.out.println("Using Mastercard (5% fee).");
-        } else if (bankAccount.startsWith("KZ") && bankAccount.length() > 16) {
-            fee = 0.10;
-            System.out.println("Using Kaspi account (10% fee).");
-        } else {
-            System.out.println("Invalid bank account format.");
-            return;
-        }
-        double netAmount = amount - (amount * fee);
-        this.balance += netAmount;
-        System.out.println("Top-up successful. Amount added: " + netAmount + ". New balance: " + this.balance);
+        balance += amount;
+        System.out.println("Successfully topped up: $" + amount + ". New balance: $" + balance);
     }
 }

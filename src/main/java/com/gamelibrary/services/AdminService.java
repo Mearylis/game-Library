@@ -17,12 +17,10 @@ public class AdminService {
 
     public void approveGame(int gameId) {
         gameRepository.approveGame(gameId);
-        System.out.println("Game with ID " + gameId + " approved.");
     }
 
     public void deleteGame(int gameId) {
         gameRepository.deleteGame(gameId);
-        System.out.println("Game with ID " + gameId + " deleted.");
     }
 
     public List<User> getAllUsers() {
@@ -35,11 +33,9 @@ public class AdminService {
 
     public void banUser(int userId) {
         userRepository.banUser(userId);
-        System.out.println("User with ID " + userId + " banned.");
     }
 
     public void unbanUser(int userId) {
         userRepository.unbanUser(userId);
-        System.out.println("User with ID " + userId + " unbanned.");
     }
 }
