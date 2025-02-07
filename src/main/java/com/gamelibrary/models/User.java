@@ -7,6 +7,7 @@ public class User {
     private Role role;
     private double balance;
     private boolean banned;
+    private String cardNumber;
 
     public User(int id, String username, String password, Role role, double balance, boolean banned) {
         this.id = id;
@@ -17,6 +18,13 @@ public class User {
         this.banned = banned;
     }
 
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
     public int getId() {
         return id;
     }
