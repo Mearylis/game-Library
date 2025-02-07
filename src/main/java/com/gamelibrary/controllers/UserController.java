@@ -2,17 +2,14 @@ package com.gamelibrary.controllers;
 
 import com.gamelibrary.models.*;
 import com.gamelibrary.services.UserService;
-import com.gamelibrary.repositories.GameRepository;
 
 import java.util.List;
 
 public class UserController {
     private final UserService userService;
-    private final GameRepository gameRepository;
 
-    public UserController(UserService userService, GameRepository gameRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.gameRepository = gameRepository;
     }
 
     public void registerUser(int id, String username, String password, Role role) {
@@ -39,21 +36,19 @@ public class UserController {
         userService.removeFromCart(userId, gameId);
     }
 
-    // Updated top-up balance method
-    public void topUpBalance(int userId, String cardNumber) {
-        userService.topUpBalance(userId, cardNumber); // Delegate logic to UserService
-    }
-
-    public void addBalance(int userId, double amount) {
-        userService.addBalance(userId, amount); // Delegate balance addition to UserService
-    }
-
-
-    public List<Game> getAllGames() {
-        return gameRepository.getAllGames(); // Fetch all games from GameRepository
+    public void topUpBalance(int userId, double amount, String cardNumber, String cardExpiryDate, String cardCVV) {
+        userService.topUpBalance(userId, amount, cardNumber, cardExpiryDate, cardCVV);
     }
 
     public List<Purchase> getPurchasedGames(int userId) {
         return userService.getPurchasedGames(userId);
+    }
+
+    public double getUserBalance(int userId) {
+        return userService.getUserBalance(userId);
+    }
+
+    public List<Game> getAllGames() {
+        return userService.getAllGames();
     }
 }

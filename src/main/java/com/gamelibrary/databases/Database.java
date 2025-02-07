@@ -51,7 +51,8 @@ public class Database {
                     "developerId INT REFERENCES users(id) ON DELETE CASCADE, " +
                     "price DECIMAL(10,2) DEFAULT 0.00, " +
                     "creationDate DATE DEFAULT CURRENT_DATE, " +
-                    "approved BOOLEAN DEFAULT FALSE" +
+                    "approved BOOLEAN DEFAULT FALSE, " +
+                    "lastPlayedDate DATE DEFAULT CURRENT_DATE" +
                     ")");
 
             stmt.execute("CREATE TABLE IF NOT EXISTS carts (" +

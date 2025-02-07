@@ -1,13 +1,10 @@
 package com.gamelibrary.services;
 
 import com.gamelibrary.models.*;
-import com.gamelibrary.repositories.CartRepository;
-import com.gamelibrary.repositories.GameRepository;
-import com.gamelibrary.repositories.PurchaseRepository;
-import com.gamelibrary.repositories.UserRepository;
+import com.gamelibrary.repositories.*;
 
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -28,7 +25,11 @@ public class UserService {
     }
 
     public User login(String username, String password) {
-        return userRepository.getUserByUsername(username);
+        User user = userRepository.getUserByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
     }
 
     public void addToCart(int userId, int gameId) {
@@ -37,73 +38,47 @@ public class UserService {
     }
 
     public List<Game> getCartGames(int userId) {
-        return cartRepository.getCartByUserId(userId).stream()
-                .map(c -> gameRepository.getGameById(c.getGameId()))
-                .toList();
+        List<Cart> carts = cartRepository.getCartByUserId(userId);
+        return carts.stream().map(cart -> gameRepository.getGameById(cart.getGameId())).toList();
     }
 
     public void purchaseGames(int userId) {
-        List<Cart> cartItems = cartRepository.getCartByUserId(userId);
+        List<Game> cartGames = getCartGames(userId);
         User user = userRepository.getUserById(userId);
-        double totalCost = cartItems.stream()
-                .mapToDouble(c -> gameRepository.getGameById(c.getGameId()).getPrice())
-                .sum();
-
-        if (user.getBalance() >= totalCost) {
-            user.setBalance(user.getBalance() - totalCost);
-            cartItems.forEach(c -> {
-                Purchase purchase = new Purchase(purchaseRepository.getAllPurchases().size() + 1, userId, c.getGameId(), LocalDate.now());
+        for (Game game : cartGames) {
+            if (user.getBalance() >= game.getPrice()) {
+                user.setBalance(user.getBalance() - game.getPrice());
+                Purchase purchase = new Purchase(purchaseRepository.getAllPurchases().size() + 1, userId, game.getId(), LocalDate.now());
                 purchaseRepository.addPurchase(purchase);
-            });
-            cartRepository.getCartByUserId(userId).clear();
-        } else {
-            System.out.println("Insufficient balance.");
+                cartRepository.removeFromCart(userId, game.getId());
+            } else {
+                System.out.println("Insufficient balance for game: " + game.getName());
+            }
         }
     }
 
     public void removeFromCart(int userId, int gameId) {
         cartRepository.removeFromCart(userId, gameId);
     }
-    public void addBalance(int userId, double amount) {
+
+    public void topUpBalance(int userId, double amount, String cardNumber, String cardExpiryDate, String cardCVV) {
         User user = userRepository.getUserById(userId);
-        if (user != null) {
-            user.setBalance(user.getBalance() + amount);
-        } else {
-            System.out.println("User not found. Unable to add balance.");
-        }
-    }
-
-    public void topUpBalance(int userId, String cardNumber) {
-        User user = userRepository.getUserById(userId);
-
-        if (user == null) {
-            System.out.println("User not found. Unable to top up balance.");
-            return;
-        }
-
-        // Check if the user already has a registered card
-        if (user.getCardNumber() != null) {
-            // Card already registered, show current balance
-            System.out.printf("Your current balance is $%.2f.%n", user.getBalance());
-            return;
-        }
-
-        // Validate the card number (only happens the first time)
-        if (!cardNumber.matches("\\d{16}")) {
-            System.out.println("Invalid card number! Please enter a valid 16-digit card number.");
-            return;
-        }
-
-        // Register the card and generate the initial balance
-        user.setCardNumber(cardNumber); // Save the card number to the user
-        int generatedBalance = (int) (Math.random() * (10000 - 2000 + 1)) + 2000;
-        user.setBalance(user.getBalance() + generatedBalance);
-
-        System.out.printf("Card added successfully! Your account has been credited with $%d.%n", generatedBalance);
-        System.out.printf("New Balance: $%.2f%n", user.getBalance());
+        user.setCardNumber(cardNumber);
+        user.setCardExpiryDate(cardExpiryDate);
+        user.setCardCVV(cardCVV);
+        user.setBalance(user.getBalance() + amount);
     }
 
     public List<Purchase> getPurchasedGames(int userId) {
         return purchaseRepository.getPurchasesByUserId(userId);
+    }
+
+    public double getUserBalance(int userId) {
+        User user = userRepository.getUserById(userId);
+        return user.getBalance();
+    }
+
+    public List<Game> getAllGames() {
+        return gameRepository.getAllGames();
     }
 }

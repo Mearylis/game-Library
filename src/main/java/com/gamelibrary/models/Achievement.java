@@ -1,19 +1,16 @@
-// src/main/java/com/gamelibrary/models/Purchase.java
 package com.gamelibrary.models;
 
-import java.time.LocalDate;
-
-public class Purchase {
+public class Achievement {
     private int id;
     private int userId;
     private int gameId;
-    private LocalDate purchaseDate;
+    private String description;
 
-    public Purchase(int id, int userId, int gameId, LocalDate purchaseDate) {
+    public Achievement(int id, int userId, int gameId, String description) {
         this.id = id;
         this.userId = userId;
         this.gameId = gameId;
-        this.purchaseDate = purchaseDate;
+        this.description = description;
     }
 
     public int getId() {
@@ -28,7 +25,7 @@ public class Purchase {
         return gameId;
     }
 
-    public LocalDate getPurchaseDate() {
-        return purchaseDate;
+    public String getDescription() {
+        return description;
     }
 }

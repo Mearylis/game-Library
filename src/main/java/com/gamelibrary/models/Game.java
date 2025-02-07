@@ -9,6 +9,7 @@ public class Game {
     private double price;
     private LocalDate creationDate;
     private boolean approved;
+    private LocalDate lastPlayedDate;
 
     public Game(int id, String name, int developerId, double price, LocalDate creationDate, boolean approved) {
         this.id = id;
@@ -17,6 +18,7 @@ public class Game {
         this.price = price;
         this.creationDate = creationDate;
         this.approved = approved;
+        this.lastPlayedDate = LocalDate.now();
     }
 
     public int getId() {
@@ -45,5 +47,13 @@ public class Game {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public LocalDate getLastPlayedDate() {
+        return lastPlayedDate;
+    }
+
+    public void setLastPlayedDate(LocalDate lastPlayedDate) {
+        this.lastPlayedDate = lastPlayedDate;
     }
 }
