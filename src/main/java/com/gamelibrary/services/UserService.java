@@ -6,8 +6,8 @@ import com.gamelibrary.repositories.GameRepository;
 import com.gamelibrary.repositories.PurchaseRepository;
 import com.gamelibrary.repositories.UserRepository;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -64,11 +64,39 @@ public class UserService {
     public void removeFromCart(int userId, int gameId) {
         cartRepository.removeFromCart(userId, gameId);
     }
-
-    public void topUpBalance(int userId, double amount, String cardType) {
+    public void addBalance(int userId, double amount) {
         User user = userRepository.getUserById(userId);
-        double commission = cardType.equals("Visa") ? 0.02 : 0.03;
-        user.setBalance(user.getBalance() + amount * (1 - commission));
+        if (user != null) {
+            user.setBalance(user.getBalance() + amount);
+        } else {
+            System.out.println("User not found. Unable to add balance.");
+        }
+    }
+
+    public void topUpBalance(int userId, String cardNumber) {
+        User user = userRepository.getUserById(userId);
+
+        if (user == null) {
+            System.out.println("User not found. Unable to top up balance.");
+            return;
+        }
+
+        if (user.getCardNumber() != null) {
+            System.out.printf("Your current balance is $%.2f.%n", user.getBalance());
+            return;
+        }
+
+        if (!cardNumber.matches("\\d{16}")) {
+            System.out.println("Invalid card number! Please enter a valid 16-digit card number.");
+            return;
+        }
+
+        user.setCardNumber(cardNumber);
+        int generatedBalance = (int) (Math.random() * (10000 - 2000 + 1)) + 2000;
+        user.setBalance(user.getBalance() + generatedBalance);
+
+        System.out.printf("Card added successfully! Your account has been credited with $%d.%n", generatedBalance);
+        System.out.printf("New Balance: $%.2f%n", user.getBalance());
     }
 
     public List<Purchase> getPurchasedGames(int userId) {
