@@ -1,5 +1,6 @@
 package com.gamelibrary;
 
+import com.gamelibrary.models.Game;
 import com.gamelibrary.controllers.AdminController;
 import com.gamelibrary.controllers.DeveloperController;
 import com.gamelibrary.controllers.UserController;
@@ -30,7 +31,7 @@ public class Main {
 
         AdminController adminController = new AdminController(adminService);
         DeveloperController developerController = new DeveloperController(developerService);
-        UserController userController = new UserController(userService, gameRepository);
+        UserController userController = new UserController(userService);
 
         Scanner scanner = new Scanner(System.in);
         User currentUser = null;
@@ -123,36 +124,50 @@ public class Main {
                         }
                     }
                     case USER -> {
-                        System.out.println("1. Add to Cart\n2. View Cart\n3. Purchase Games\n4. Remove from Cart\n5. Top Up Balance\n6. View Purchased Games\n7. Logout");
+                        System.out.println("1. Add to Cart\n2. View Cart\n3. Purchase Games\n4. Remove from Cart\n5. Top Up Balance\n6. View Purchased Games\n7. View Balance\n8. Logout");
                         int choice = scanner.nextInt();
                         scanner.nextLine();
 
                         if (choice == 1) {
+                            System.out.println("Available games:");
+                            userController.getAllGames().forEach(g -> System.out.println("ID: " + g.getId() + " - " + g.getName() + " - $" + g.getPrice()));
                             System.out.println("Enter game ID to add to cart:");
                             int gameId = scanner.nextInt();
                             userController.addToCart(currentUser.getId(), gameId);
+                            System.out.println("Current balance: $" + userController.getUserBalance(currentUser.getId()));
                         } else if (choice == 2) {
-                            userController.getCartGames(currentUser.getId()).forEach(g -> System.out.println(g.getName() + " - $" + g.getPrice()));
+                            userController.getCartGames(currentUser.getId()).forEach(g -> System.out.println("ID: " + g.getId() + " - " + g.getName() + " - $" + g.getPrice()));
                         } else if (choice == 3) {
+                            System.out.println("Games in cart:");
+                            userController.getCartGames(currentUser.getId()).forEach(g -> System.out.println("ID: " + g.getId() + " - " + g.getName() + " - $" + g.getPrice()));
                             userController.purchaseGames(currentUser.getId());
+                            System.out.println("Current balance: $" + userController.getUserBalance(currentUser.getId()));
                         } else if (choice == 4) {
                             System.out.println("Enter game ID to remove from cart:");
                             int gameId = scanner.nextInt();
                             userController.removeFromCart(currentUser.getId(), gameId);
                         } else if (choice == 5) {
-                            // Top-Up Balance Logic
-                            System.out.println("Enter 16-digit card number:");
+                            System.out.println("Enter amount to top up:");
+                            double amount = scanner.nextDouble();
+                            scanner.nextLine();
+                            System.out.println("Enter card number:");
                             String cardNumber = scanner.nextLine();
-
-                            // Call UserController to handle top-up balance
-                            userController.topUpBalance(currentUser.getId(), cardNumber);
+                            System.out.println("Enter card expiry date (MM/YY):");
+                            String cardExpiryDate = scanner.nextLine();
+                            System.out.println("Enter card CVV:");
+                            String cardCVV = scanner.nextLine();
+                            userController.topUpBalance(currentUser.getId(), amount, cardNumber, cardExpiryDate, cardCVV);
                         } else if (choice == 6) {
-                            userController.getPurchasedGames(currentUser.getId()).forEach(p -> System.out.println(p.getGameId() + " - " + p.getPurchaseDate()));
+                            userController.getPurchasedGames(currentUser.getId()).forEach(p -> {
+                                Game game = gameRepository.getGameById(p.getGameId());
+                                System.out.println("ID: " + game.getId() + " - " + game.getName() + " - " + game.getPrice());
+                            });
                         } else if (choice == 7) {
+                            System.out.println("Current balance: $" + userController.getUserBalance(currentUser.getId()));
+                        } else if (choice == 8) {
                             currentUser = null;
                         }
                     }
-
                 }
             }
         }

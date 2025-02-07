@@ -8,6 +8,8 @@ public class User {
     private double balance;
     private boolean banned;
     private String cardNumber;
+    private String cardExpiryDate; // Add this field
+    private String cardCVV; // Add this field
 
     public User(int id, String username, String password, Role role, double balance, boolean banned) {
         this.id = id;
@@ -25,6 +27,23 @@ public class User {
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
+
+    public String getCardExpiryDate() {
+        return cardExpiryDate;
+    }
+
+    public void setCardExpiryDate(String cardExpiryDate) {
+        this.cardExpiryDate = cardExpiryDate;
+    }
+
+    public String getCardCVV() {
+        return cardCVV;
+    }
+
+    public void setCardCVV(String cardCVV) {
+        this.cardCVV = cardCVV;
+    }
+
     public int getId() {
         return id;
     }
