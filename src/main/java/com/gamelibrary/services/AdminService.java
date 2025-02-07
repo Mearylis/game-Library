@@ -4,7 +4,6 @@ import com.gamelibrary.models.Game;
 import com.gamelibrary.models.User;
 import com.gamelibrary.repositories.GameRepository;
 import com.gamelibrary.repositories.UserRepository;
-
 import java.util.List;
 
 public class AdminService {
@@ -18,22 +17,12 @@ public class AdminService {
 
     public void approveGame(int gameId) {
         gameRepository.approveGame(gameId);
+        System.out.println("Game with ID " + gameId + " approved.");
     }
 
     public void deleteGame(int gameId) {
         gameRepository.deleteGame(gameId);
-    }
-
-    public void banUser(int userId) {
-        userRepository.banUser(userId);
-    }
-
-    public void unbanUser(int userId) {
-        userRepository.unbanUser(userId);
-    }
-
-    public void deleteUser(int userId) {
-        userRepository.deleteUser(userId);
+        System.out.println("Game with ID " + gameId + " deleted.");
     }
 
     public List<User> getAllUsers() {
@@ -42,5 +31,15 @@ public class AdminService {
 
     public List<Game> getAllGames() {
         return gameRepository.getAllGames();
+    }
+
+    public void banUser(int userId) {
+        userRepository.banUser(userId);
+        System.out.println("User with ID " + userId + " banned.");
+    }
+
+    public void unbanUser(int userId) {
+        userRepository.unbanUser(userId);
+        System.out.println("User with ID " + userId + " unbanned.");
     }
 }

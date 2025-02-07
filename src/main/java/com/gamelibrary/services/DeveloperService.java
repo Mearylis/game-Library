@@ -3,9 +3,6 @@ package com.gamelibrary.services;
 import com.gamelibrary.models.Game;
 import com.gamelibrary.repositories.GameRepository;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public class DeveloperService {
     private final GameRepository gameRepository;
 
@@ -13,19 +10,21 @@ public class DeveloperService {
         this.gameRepository = gameRepository;
     }
 
-    public void createGame(int id, String name, int developerId, double price) {
-        Game game = new Game(id, name, developerId, price, LocalDate.now(), false);
+    // Existing method to add a game with all five parameters
+    public void addGame(int id, String name, double price, boolean approved, int developerId) {
+        Game game = new Game(id, name, price, approved, developerId);
         gameRepository.addGame(game);
+        System.out.println("Game added successfully.");
     }
 
-    public List<Game> getGamesByDeveloper(int developerId) {
-        return gameRepository.getAllGames().stream().filter(g -> g.getDeveloperId() == developerId).toList();
+    // New method that creates a game with approved defaulting to false
+    public void createGame(int id, String name, int developerId, double price) {
+        addGame(id, name, price, false, developerId);
     }
 
-    public void deleteGame(int gameId, int developerId) {
-        Game game = gameRepository.getGameById(gameId);
-        if (game != null && game.getDeveloperId() == developerId) {
-            gameRepository.deleteGame(gameId);
-        }
+    public void viewGamesByDeveloper(int developerId) {
+        gameRepository.getAllGames().stream()
+                .filter(game -> game.getDeveloperId() == developerId)
+                .forEach(game -> System.out.println("Game: " + game.getName() + ", Price: $" + game.getPrice()));
     }
 }
