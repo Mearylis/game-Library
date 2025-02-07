@@ -6,6 +6,7 @@
 .s0 { color: #cf8e6d;}
 .s1 { color: #bcbec4;}
 .s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
 </style>
 </head>
 <body bgcolor="#1e1f22">
@@ -18,7 +19,6 @@ DeveloperController.java</font>
 
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">Game</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">.</span><span class="s1">DeveloperService</span><span class="s2">;</span>
-
 <span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
 
 <span class="s0">public class </span><span class="s1">DeveloperController </span><span class="s2">{</span>
@@ -32,13 +32,19 @@ DeveloperController.java</font>
         <span class="s1">developerService</span><span class="s2">.</span><span class="s1">createGame</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">name</span><span class="s2">, </span><span class="s1">developerId</span><span class="s2">, </span><span class="s1">price</span><span class="s2">);</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">getGamesByDeveloper</span><span class="s2">(</span><span class="s0">int </span><span class="s1">developerId</span><span class="s2">) {</span>
-        <span class="s0">return </span><span class="s1">developerService</span><span class="s2">.</span><span class="s1">getGamesByDeveloper</span><span class="s2">(</span><span class="s1">developerId</span><span class="s2">);</span>
+    <span class="s0">public void </span><span class="s1">listMyGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">developerId</span><span class="s2">) {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">games </span><span class="s2">= </span><span class="s1">developerService</span><span class="s2">.</span><span class="s1">viewGamesByDeveloper</span><span class="s2">(</span><span class="s1">developerId</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">games</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;No games found for developer ID: &quot; </span><span class="s2">+ </span><span class="s1">developerId</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s1">Game g </span><span class="s2">: </span><span class="s1">games</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;ID: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() + </span><span class="s3">&quot;, Name: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">() +</span>
+                        <span class="s3">&quot;, Price: $&quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getPrice</span><span class="s2">() + </span><span class="s3">&quot;, Approved: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">isApproved</span><span class="s2">() +</span>
+                        <span class="s3">&quot;, Category: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getCategory</span><span class="s2">());</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
     <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">deleteGame</span><span class="s2">(</span><span class="s0">int </span><span class="s1">gameId</span><span class="s2">, </span><span class="s0">int </span><span class="s1">developerId</span><span class="s2">) {</span>
-        <span class="s1">developerService</span><span class="s2">.</span><span class="s1">deleteGame</span><span class="s2">(</span><span class="s1">gameId</span><span class="s2">, </span><span class="s1">developerId</span><span class="s2">);</span>
-    <span class="s2">}</span>
-<span class="s2">}</span></pre>
+<span class="s2">}</span>
+</pre>
 </body>
 </html>

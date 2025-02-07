@@ -3,6 +3,7 @@ package com.gamelibrary.controllers;
 import com.gamelibrary.models.Game;
 import com.gamelibrary.models.User;
 import com.gamelibrary.services.AdminService;
+
 import java.util.List;
 
 public class AdminController {
@@ -10,14 +11,6 @@ public class AdminController {
 
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
-    }
-
-    public void approveGame(int gameId) {
-        adminService.approveGame(gameId);
-    }
-
-    public void deleteGame(int gameId) {
-        adminService.deleteGame(gameId);
     }
 
     public void banUser(int userId) {
@@ -28,21 +21,19 @@ public class AdminController {
         adminService.unbanUser(userId);
     }
 
-    public void viewAllUsers() {
-        List<User> users = adminService.getAllUsers();
-        for (User u : users) {
-            System.out.println("ID: " + u.getId() + ", Username: " + u.getUsername() +
-                    ", Role: " + u.getRole() + ", Balance: $" + u.getBalance() +
-                    ", Banned: " + u.isBanned());
-        }
+    public void approveGame(int gameId) {
+        adminService.approveGame(gameId);
     }
 
-    public void viewAllGames() {
-        List<Game> games = adminService.getAllGames();
-        for (Game g : games) {
-            System.out.println("ID: " + g.getId() + ", Name: " + g.getName() +
-                    ", Price: $" + g.getPrice() + ", Approved: " + g.isApproved() +
-                    ", DeveloperID: " + g.getDeveloperId() + ", Category: " + g.getCategory());
-        }
+    public void rejectGame(int gameId) {
+        adminService.rejectGame(gameId);
+    }
+
+    public List<User> getAllUsers() {
+        return adminService.getAllUsers();
+    }
+
+    public List<Game> getAllGames() {
+        return adminService.getAllGames();
     }
 }

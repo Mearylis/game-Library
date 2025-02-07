@@ -8,7 +8,6 @@
 .s2 { color: #bcbec4;}
 .s3 { color: #2aacb8;}
 .s4 { color: #6aab73;}
-.s5 { color: #7a7e85;}
 </style>
 </head>
 <body bgcolor="#1e1f22">
@@ -19,111 +18,56 @@ UserService.java</font>
 </center></td></tr></table>
 <pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">;</span>
 
-<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.*;</span>
-<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">CartRepository</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">Game</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">User</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">GameRepository</span><span class="s2">;</span>
-<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">PurchaseRepository</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">UserRepository</span><span class="s2">;</span>
 
 <span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
-<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDate</span><span class="s2">;</span>
 
 <span class="s0">public class </span><span class="s1">UserService </span><span class="s2">{</span>
     <span class="s0">private final </span><span class="s1">UserRepository userRepository</span><span class="s2">;</span>
     <span class="s0">private final </span><span class="s1">GameRepository gameRepository</span><span class="s2">;</span>
-    <span class="s0">private final </span><span class="s1">CartRepository cartRepository</span><span class="s2">;</span>
-    <span class="s0">private final </span><span class="s1">PurchaseRepository purchaseRepository</span><span class="s2">;</span>
 
-    <span class="s0">public </span><span class="s1">UserService</span><span class="s2">(</span><span class="s1">UserRepository userRepository</span><span class="s2">, </span><span class="s1">GameRepository gameRepository</span><span class="s2">, </span><span class="s1">CartRepository cartRepository</span><span class="s2">, </span><span class="s1">PurchaseRepository purchaseRepository</span><span class="s2">) {</span>
+    <span class="s0">public </span><span class="s1">UserService</span><span class="s2">(</span><span class="s1">UserRepository userRepository</span><span class="s2">, </span><span class="s1">GameRepository gameRepository</span><span class="s2">) {</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">userRepository </span><span class="s2">= </span><span class="s1">userRepository</span><span class="s2">;</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">gameRepository </span><span class="s2">= </span><span class="s1">gameRepository</span><span class="s2">;</span>
-        <span class="s0">this</span><span class="s2">.</span><span class="s1">cartRepository </span><span class="s2">= </span><span class="s1">cartRepository</span><span class="s2">;</span>
-        <span class="s0">this</span><span class="s2">.</span><span class="s1">purchaseRepository </span><span class="s2">= </span><span class="s1">purchaseRepository</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">registerUser</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">, </span><span class="s1">String username</span><span class="s2">, </span><span class="s1">String password</span><span class="s2">, </span><span class="s1">Role role</span><span class="s2">) {</span>
-        <span class="s1">User user </span><span class="s2">= </span><span class="s0">new </span><span class="s1">User</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">, </span><span class="s1">role</span><span class="s2">, </span><span class="s3">0.0</span><span class="s2">, </span><span class="s0">false</span><span class="s2">);</span>
-        <span class="s1">userRepository</span><span class="s2">.</span><span class="s1">addUser</span><span class="s2">(</span><span class="s1">user</span><span class="s2">);</span>
+    <span class="s0">public void </span><span class="s1">registerUser</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">, </span><span class="s1">String username</span><span class="s2">, </span><span class="s1">String password</span><span class="s2">, </span><span class="s1">String role</span><span class="s2">) {</span>
+        <span class="s1">userRepository</span><span class="s2">.</span><span class="s1">addUser</span><span class="s2">(</span><span class="s0">new </span><span class="s1">User</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">, </span><span class="s0">null</span><span class="s2">, </span><span class="s3">0.0</span><span class="s2">, </span><span class="s0">false</span><span class="s2">));</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;User registered successfully.&quot;</span><span class="s2">);</span>
     <span class="s2">}</span>
 
     <span class="s0">public </span><span class="s1">User login</span><span class="s2">(</span><span class="s1">String username</span><span class="s2">, </span><span class="s1">String password</span><span class="s2">) {</span>
-        <span class="s0">return </span><span class="s1">userRepository</span><span class="s2">.</span><span class="s1">getUserByUsername</span><span class="s2">(</span><span class="s1">username</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">userRepository</span><span class="s2">.</span><span class="s1">getAllUsers</span><span class="s2">().</span><span class="s1">stream</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">filter</span><span class="s2">(</span><span class="s1">u -&gt; u</span><span class="s2">.</span><span class="s1">getUsername</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">username</span><span class="s2">) &amp;&amp; </span><span class="s1">u</span><span class="s2">.</span><span class="s1">getPassword</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">password</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">findFirst</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">orElse</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">addToCart</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">int </span><span class="s1">gameId</span><span class="s2">) {</span>
-        <span class="s1">Cart cart </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Cart</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">, </span><span class="s1">gameId</span><span class="s2">);</span>
-        <span class="s1">cartRepository</span><span class="s2">.</span><span class="s1">addToCart</span><span class="s2">(</span><span class="s1">cart</span><span class="s2">);</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">getCartGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s0">return </span><span class="s1">cartRepository</span><span class="s2">.</span><span class="s1">getCartByUserId</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">).</span><span class="s1">stream</span><span class="s2">()</span>
-                <span class="s2">.</span><span class="s1">map</span><span class="s2">(</span><span class="s1">c -&gt; gameRepository</span><span class="s2">.</span><span class="s1">getGameById</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">getGameId</span><span class="s2">()))</span>
-                <span class="s2">.</span><span class="s1">toList</span><span class="s2">();</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">purchaseGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Cart</span><span class="s2">&gt; </span><span class="s1">cartItems </span><span class="s2">= </span><span class="s1">cartRepository</span><span class="s2">.</span><span class="s1">getCartByUserId</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
+    <span class="s0">public void </span><span class="s1">leaveReview</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">int </span><span class="s1">gameId</span><span class="s2">, </span><span class="s1">String review</span><span class="s2">, </span><span class="s0">int </span><span class="s1">rating</span><span class="s2">) {</span>
         <span class="s1">User user </span><span class="s2">= </span><span class="s1">userRepository</span><span class="s2">.</span><span class="s1">getUserById</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
-        <span class="s0">double </span><span class="s1">totalCost </span><span class="s2">= </span><span class="s1">cartItems</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">()</span>
-                <span class="s2">.</span><span class="s1">mapToDouble</span><span class="s2">(</span><span class="s1">c -&gt; gameRepository</span><span class="s2">.</span><span class="s1">getGameById</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">getGameId</span><span class="s2">()).</span><span class="s1">getPrice</span><span class="s2">())</span>
-                <span class="s2">.</span><span class="s1">sum</span><span class="s2">();</span>
-
-        <span class="s0">if </span><span class="s2">(</span><span class="s1">user</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">() &gt;= </span><span class="s1">totalCost</span><span class="s2">) {</span>
-            <span class="s1">user</span><span class="s2">.</span><span class="s1">setBalance</span><span class="s2">(</span><span class="s1">user</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">() - </span><span class="s1">totalCost</span><span class="s2">);</span>
-            <span class="s1">cartItems</span><span class="s2">.</span><span class="s1">forEach</span><span class="s2">(</span><span class="s1">c -&gt; </span><span class="s2">{</span>
-                <span class="s1">Purchase purchase </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Purchase</span><span class="s2">(</span><span class="s1">purchaseRepository</span><span class="s2">.</span><span class="s1">getAllPurchases</span><span class="s2">().</span><span class="s1">size</span><span class="s2">() + </span><span class="s3">1</span><span class="s2">, </span><span class="s1">userId</span><span class="s2">, </span><span class="s1">c</span><span class="s2">.</span><span class="s1">getGameId</span><span class="s2">(), </span><span class="s1">LocalDate</span><span class="s2">.</span><span class="s1">now</span><span class="s2">());</span>
-                <span class="s1">purchaseRepository</span><span class="s2">.</span><span class="s1">addPurchase</span><span class="s2">(</span><span class="s1">purchase</span><span class="s2">);</span>
-            <span class="s2">});</span>
-            <span class="s1">cartRepository</span><span class="s2">.</span><span class="s1">getCartByUserId</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">).</span><span class="s1">clear</span><span class="s2">();</span>
-        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
-            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Insufficient balance.&quot;</span><span class="s2">);</span>
-        <span class="s2">}</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">removeFromCart</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">int </span><span class="s1">gameId</span><span class="s2">) {</span>
-        <span class="s1">cartRepository</span><span class="s2">.</span><span class="s1">removeFromCart</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">, </span><span class="s1">gameId</span><span class="s2">);</span>
-    <span class="s2">}</span>
-    <span class="s0">public void </span><span class="s1">addBalance</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">double </span><span class="s1">amount</span><span class="s2">) {</span>
-        <span class="s1">User user </span><span class="s2">= </span><span class="s1">userRepository</span><span class="s2">.</span><span class="s1">getUserById</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
-        <span class="s0">if </span><span class="s2">(</span><span class="s1">user </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
-            <span class="s1">user</span><span class="s2">.</span><span class="s1">setBalance</span><span class="s2">(</span><span class="s1">user</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">() + </span><span class="s1">amount</span><span class="s2">);</span>
-        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
-            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;User not found. Unable to add balance.&quot;</span><span class="s2">);</span>
-        <span class="s2">}</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">topUpBalance</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s1">String cardNumber</span><span class="s2">) {</span>
-        <span class="s1">User user </span><span class="s2">= </span><span class="s1">userRepository</span><span class="s2">.</span><span class="s1">getUserById</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
-
         <span class="s0">if </span><span class="s2">(</span><span class="s1">user </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
-            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;User not found. Unable to top up balance.&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;User not found.&quot;</span><span class="s2">);</span>
             <span class="s0">return</span><span class="s2">;</span>
         <span class="s2">}</span>
 
-        <span class="s5">// Check if the user already has a registered card</span>
-        <span class="s0">if </span><span class="s2">(</span><span class="s1">user</span><span class="s2">.</span><span class="s1">getCardNumber</span><span class="s2">() != </span><span class="s0">null</span><span class="s2">) {</span>
-            <span class="s5">// Card already registered, show current balance</span>
-            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">printf</span><span class="s2">(</span><span class="s4">&quot;Your current balance is $%.2f.%n&quot;</span><span class="s2">, </span><span class="s1">user</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">());</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">rating </span><span class="s2">&lt; </span><span class="s3">1 </span><span class="s2">|| </span><span class="s1">rating </span><span class="s2">&gt; </span><span class="s3">5</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Invalid rating. Please enter a number between 1 and 5.&quot;</span><span class="s2">);</span>
             <span class="s0">return</span><span class="s2">;</span>
         <span class="s2">}</span>
 
-        <span class="s5">// Validate the card number (only happens the first time)</span>
-        <span class="s0">if </span><span class="s2">(!</span><span class="s1">cardNumber</span><span class="s2">.</span><span class="s1">matches</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s0">\\</span><span class="s4">d{16}&quot;</span><span class="s2">)) {</span>
-            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Invalid card number! Please enter a valid 16-digit card number.&quot;</span><span class="s2">);</span>
-            <span class="s0">return</span><span class="s2">;</span>
-        <span class="s2">}</span>
-
-        <span class="s5">// Register the card and generate the initial balance</span>
-        <span class="s1">user</span><span class="s2">.</span><span class="s1">setCardNumber</span><span class="s2">(</span><span class="s1">cardNumber</span><span class="s2">); </span><span class="s5">// Save the card number to the user</span>
-        <span class="s0">int </span><span class="s1">generatedBalance </span><span class="s2">= (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">random</span><span class="s2">() * (</span><span class="s3">10000 </span><span class="s2">- </span><span class="s3">2000 </span><span class="s2">+ </span><span class="s3">1</span><span class="s2">)) + </span><span class="s3">2000</span><span class="s2">;</span>
-        <span class="s1">user</span><span class="s2">.</span><span class="s1">setBalance</span><span class="s2">(</span><span class="s1">user</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">() + </span><span class="s1">generatedBalance</span><span class="s2">);</span>
-
-        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">printf</span><span class="s2">(</span><span class="s4">&quot;Card added successfully! Your account has been credited with $%d.%n&quot;</span><span class="s2">, </span><span class="s1">generatedBalance</span><span class="s2">);</span>
-        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">printf</span><span class="s2">(</span><span class="s4">&quot;New Balance: $%.2f%n&quot;</span><span class="s2">, </span><span class="s1">user</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">());</span>
+        <span class="s1">gameRepository</span><span class="s2">.</span><span class="s1">rateGame</span><span class="s2">(</span><span class="s1">gameId</span><span class="s2">, </span><span class="s1">rating</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Thank you for your review!&quot;</span><span class="s2">);</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Purchase</span><span class="s2">&gt; </span><span class="s1">getPurchasedGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s0">return </span><span class="s1">purchaseRepository</span><span class="s2">.</span><span class="s1">getPurchasesByUserId</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
+    <span class="s0">public void </span><span class="s1">getTopRatedGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">topN</span><span class="s2">) {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">topGames </span><span class="s2">= </span><span class="s1">gameRepository</span><span class="s2">.</span><span class="s1">getTopRatedGames</span><span class="s2">(</span><span class="s1">topN</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;</span><span class="s0">\n</span><span class="s4">--- Top &quot; </span><span class="s2">+ </span><span class="s1">topN </span><span class="s2">+ </span><span class="s4">&quot; Rated Games ---&quot;</span><span class="s2">);</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Game game </span><span class="s2">: </span><span class="s1">topGames</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">game</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">() + </span><span class="s4">&quot; - Avg Rating: &quot; </span><span class="s2">+ </span><span class="s1">game</span><span class="s2">.</span><span class="s1">getAverageRating</span><span class="s2">());</span>
+        <span class="s2">}</span>
     <span class="s2">}</span>
 <span class="s2">}</span>
 </pre>

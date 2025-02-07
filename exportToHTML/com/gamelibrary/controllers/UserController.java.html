@@ -17,61 +17,24 @@ UserController.java</font>
 </center></td></tr></table>
 <pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">controllers</span><span class="s2">;</span>
 
-<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">User</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">.</span><span class="s1">UserService</span><span class="s2">;</span>
-<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">GameRepository</span><span class="s2">;</span>
-
-<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
 
 <span class="s0">public class </span><span class="s1">UserController </span><span class="s2">{</span>
     <span class="s0">private final </span><span class="s1">UserService userService</span><span class="s2">;</span>
-    <span class="s0">private final </span><span class="s1">GameRepository gameRepository</span><span class="s2">;</span>
 
-    <span class="s0">public </span><span class="s1">UserController</span><span class="s2">(</span><span class="s1">UserService userService</span><span class="s2">, </span><span class="s1">GameRepository gameRepository</span><span class="s2">) {</span>
+    <span class="s0">public </span><span class="s1">UserController</span><span class="s2">(</span><span class="s1">UserService userService</span><span class="s2">) {</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">userService </span><span class="s2">= </span><span class="s1">userService</span><span class="s2">;</span>
-        <span class="s0">this</span><span class="s2">.</span><span class="s1">gameRepository </span><span class="s2">= </span><span class="s1">gameRepository</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">registerUser</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">, </span><span class="s1">String username</span><span class="s2">, </span><span class="s1">String password</span><span class="s2">, </span><span class="s1">Role role</span><span class="s2">) {</span>
+    <span class="s3">// Register a user by calling UserService.registerUser</span>
+    <span class="s0">public void </span><span class="s1">registerUser</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">, </span><span class="s1">String username</span><span class="s2">, </span><span class="s1">String password</span><span class="s2">, </span><span class="s1">String role</span><span class="s2">) {</span>
         <span class="s1">userService</span><span class="s2">.</span><span class="s1">registerUser</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">, </span><span class="s1">role</span><span class="s2">);</span>
     <span class="s2">}</span>
 
+    <span class="s3">// Login a user by calling UserService.login</span>
     <span class="s0">public </span><span class="s1">User login</span><span class="s2">(</span><span class="s1">String username</span><span class="s2">, </span><span class="s1">String password</span><span class="s2">) {</span>
         <span class="s0">return </span><span class="s1">userService</span><span class="s2">.</span><span class="s1">login</span><span class="s2">(</span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">);</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">addToCart</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">int </span><span class="s1">gameId</span><span class="s2">) {</span>
-        <span class="s1">userService</span><span class="s2">.</span><span class="s1">addToCart</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">, </span><span class="s1">gameId</span><span class="s2">);</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">getCartGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s0">return </span><span class="s1">userService</span><span class="s2">.</span><span class="s1">getCartGames</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">purchaseGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s1">userService</span><span class="s2">.</span><span class="s1">purchaseGames</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">removeFromCart</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">int </span><span class="s1">gameId</span><span class="s2">) {</span>
-        <span class="s1">userService</span><span class="s2">.</span><span class="s1">removeFromCart</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">, </span><span class="s1">gameId</span><span class="s2">);</span>
-    <span class="s2">}</span>
-
-    <span class="s3">// Updated top-up balance method</span>
-    <span class="s0">public void </span><span class="s1">topUpBalance</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s1">String cardNumber</span><span class="s2">) {</span>
-        <span class="s1">userService</span><span class="s2">.</span><span class="s1">topUpBalance</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">, </span><span class="s1">cardNumber</span><span class="s2">); </span><span class="s3">// Delegate logic to UserService</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public void </span><span class="s1">addBalance</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">, </span><span class="s0">double </span><span class="s1">amount</span><span class="s2">) {</span>
-        <span class="s1">userService</span><span class="s2">.</span><span class="s1">addBalance</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">, </span><span class="s1">amount</span><span class="s2">); </span><span class="s3">// Delegate balance addition to UserService</span>
-    <span class="s2">}</span>
-
-
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">getAllGames</span><span class="s2">() {</span>
-        <span class="s0">return </span><span class="s1">gameRepository</span><span class="s2">.</span><span class="s1">getAllGames</span><span class="s2">(); </span><span class="s3">// Fetch all games from GameRepository</span>
-    <span class="s2">}</span>
-
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Purchase</span><span class="s2">&gt; </span><span class="s1">getPurchasedGames</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s0">return </span><span class="s1">userService</span><span class="s2">.</span><span class="s1">getPurchasedGames</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
     <span class="s2">}</span>
 <span class="s2">}</span>
 </pre>

@@ -2,6 +2,7 @@ package com.gamelibrary.controllers;
 
 import com.gamelibrary.models.Game;
 import com.gamelibrary.services.DeveloperService;
+
 import java.util.List;
 
 public class DeveloperController {
@@ -11,20 +12,19 @@ public class DeveloperController {
         this.developerService = developerService;
     }
 
-    public void createGame(int id, String name, int developerId, double price) {
-        developerService.createGame(id, name, developerId, price);
+    public int createGame(String name, int developerId, double price, double sizeGB, int ageRestriction, String genre, String description) {
+        return developerService.createGame(name, developerId, price, sizeGB, ageRestriction, genre, description);
     }
 
-    public void listMyGames(int developerId) {
-        List<Game> games = developerService.viewGamesByDeveloper(developerId);
-        if (games.isEmpty()) {
-            System.out.println("No games found for developer ID: " + developerId);
-        } else {
-            for (Game g : games) {
-                System.out.println("ID: " + g.getId() + ", Name: " + g.getName() +
-                        ", Price: $" + g.getPrice() + ", Approved: " + g.isApproved() +
-                        ", Category: " + g.getCategory());
-            }
-        }
+    public List<Game> getGamesByDeveloper(int developerId) {
+        return developerService.getGamesByDeveloper(developerId);
+    }
+
+    public void deleteGame(int gameId, int developerId) {
+        developerService.deleteGame(gameId, developerId);
+    }
+
+    public double getEarnings(int developerId) {
+        return developerService.getEarnings(developerId);
     }
 }

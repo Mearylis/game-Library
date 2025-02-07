@@ -1,39 +1,47 @@
 package com.gamelibrary.services;
-
-import com.gamelibrary.models.User;
-import com.gamelibrary.models.Role;
+import com.gamelibrary.models.Game;
+import com.gamelibrary.repositories.GameRepository;
 import com.gamelibrary.repositories.UserRepository;
+import com.gamelibrary.validators.GameValidator;
+import java.util.List;
 
-public class UserService {
+public class DeveloperService {
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
-    public UserService(UserRepository userRepository) {
+    public DeveloperService(UserRepository userRepository, GameRepository gameRepository) {
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
     }
 
-    // Method to register a user (int ID, String username, String password, String role)
-    public void registerUser(int id, String username, String password, String role) {
-        // Convert role from String to enum Role
-        Role userRole = Role.valueOf(role.toUpperCase());
-
-        // Create a new User instance
-        User newUser = new User(id, username, password, userRole, 0.0, false);
-
-        // Add the user to the repository
-        userRepository.addUser(newUser);
-        System.out.println("User registered: " + username + " with role: " + role);
-    }
-
-    // Method to log in a user (String username, String password)
-    public User login(String username, String password) {
-        // Find the user in the repository based on username and password
-        for (User user : userRepository.getAllUsers()) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                System.out.println("Login successful for user: " + username);
-                return user;
-            }
+    public int createGame(String name, int developerId, double price, double sizeGB, int ageRestriction, String genre, String description) {
+        if (!GameValidator.validateGame(name, price, sizeGB, ageRestriction)) {
+            throw new IllegalArgumentException("Invalid game data.");
         }
-        System.out.println("Invalid credentials for user: " + username);
-        return null;
+
+        int gameId = gameRepository.getAllGames().size() + 1;
+        Game game = new Game(gameId, name, developerId, price, sizeGB, ageRestriction, genre, description);
+        gameRepository.addGame(game);
+        return gameId;
+    }
+
+    public List<Game> getGamesByDeveloper(int developerId) {
+        return gameRepository.getAllGames().stream()
+                .filter(game -> game.getDeveloperId() == developerId)
+                .toList();
+    }
+
+    public void deleteGame(int gameId, int developerId) {
+        Game game = gameRepository.getGameById(gameId);
+        if (game != null && game.getDeveloperId() == developerId) {
+            gameRepository.deleteGame(gameId);
+        }
+    }
+
+    public double getEarnings(int developerId) {
+        return gameRepository.getAllGames().stream()
+                .filter(game -> game.getDeveloperId() == developerId && game.isApproved())
+                .mapToDouble(Game::getPrice)
+                .sum();
     }
 }

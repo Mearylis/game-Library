@@ -6,6 +6,7 @@
 .s0 { color: #cf8e6d;}
 .s1 { color: #bcbec4;}
 .s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
 </style>
 </head>
 <body bgcolor="#1e1f22">
@@ -19,7 +20,6 @@ AdminController.java</font>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">Game</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">User</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">.</span><span class="s1">AdminService</span><span class="s2">;</span>
-
 <span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
 
 <span class="s0">public class </span><span class="s1">AdminController </span><span class="s2">{</span>
@@ -45,17 +45,24 @@ AdminController.java</font>
         <span class="s1">adminService</span><span class="s2">.</span><span class="s1">unbanUser</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">deleteUser</span><span class="s2">(</span><span class="s0">int </span><span class="s1">userId</span><span class="s2">) {</span>
-        <span class="s1">adminService</span><span class="s2">.</span><span class="s1">deleteUser</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
+    <span class="s0">public void </span><span class="s1">viewAllUsers</span><span class="s2">() {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">User</span><span class="s2">&gt; </span><span class="s1">users </span><span class="s2">= </span><span class="s1">adminService</span><span class="s2">.</span><span class="s1">getAllUsers</span><span class="s2">();</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">User u </span><span class="s2">: </span><span class="s1">users</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;ID: &quot; </span><span class="s2">+ </span><span class="s1">u</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() + </span><span class="s3">&quot;, Username: &quot; </span><span class="s2">+ </span><span class="s1">u</span><span class="s2">.</span><span class="s1">getUsername</span><span class="s2">() +</span>
+                    <span class="s3">&quot;, Role: &quot; </span><span class="s2">+ </span><span class="s1">u</span><span class="s2">.</span><span class="s1">getRole</span><span class="s2">() + </span><span class="s3">&quot;, Balance: $&quot; </span><span class="s2">+ </span><span class="s1">u</span><span class="s2">.</span><span class="s1">getBalance</span><span class="s2">() +</span>
+                    <span class="s3">&quot;, Banned: &quot; </span><span class="s2">+ </span><span class="s1">u</span><span class="s2">.</span><span class="s1">isBanned</span><span class="s2">());</span>
+        <span class="s2">}</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">User</span><span class="s2">&gt; </span><span class="s1">getAllUsers</span><span class="s2">() {</span>
-        <span class="s0">return </span><span class="s1">adminService</span><span class="s2">.</span><span class="s1">getAllUsers</span><span class="s2">();</span>
+    <span class="s0">public void </span><span class="s1">viewAllGames</span><span class="s2">() {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">games </span><span class="s2">= </span><span class="s1">adminService</span><span class="s2">.</span><span class="s1">getAllGames</span><span class="s2">();</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Game g </span><span class="s2">: </span><span class="s1">games</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;ID: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() + </span><span class="s3">&quot;, Name: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">() +</span>
+                    <span class="s3">&quot;, Price: $&quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getPrice</span><span class="s2">() + </span><span class="s3">&quot;, Approved: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">isApproved</span><span class="s2">() +</span>
+                    <span class="s3">&quot;, DeveloperID: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getDeveloperId</span><span class="s2">() + </span><span class="s3">&quot;, Category: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getCategory</span><span class="s2">());</span>
+        <span class="s2">}</span>
     <span class="s2">}</span>
-
-    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Game</span><span class="s2">&gt; </span><span class="s1">getAllGames</span><span class="s2">() {</span>
-        <span class="s0">return </span><span class="s1">adminService</span><span class="s2">.</span><span class="s1">getAllGames</span><span class="s2">();</span>
-    <span class="s2">}</span>
-<span class="s2">}</span></pre>
+<span class="s2">}</span>
+</pre>
 </body>
 </html>
