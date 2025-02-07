@@ -1,0 +1,181 @@
+<html>
+<head>
+<title>Main.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">controllers</span><span class="s2">.</span><span class="s1">AdminController</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">controllers</span><span class="s2">.</span><span class="s1">DeveloperController</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">controllers</span><span class="s2">.</span><span class="s1">UserController</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">databases</span><span class="s2">.</span><span class="s1">Database</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">Role</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">User</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">CartRepository</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">GameRepository</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">PurchaseRepository</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">repositories</span><span class="s2">.</span><span class="s1">UserRepository</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">.</span><span class="s1">AdminService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">.</span><span class="s1">DeveloperService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">gamelibrary</span><span class="s2">.</span><span class="s1">services</span><span class="s2">.</span><span class="s1">UserService</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Scanner</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">Main </span><span class="s2">{</span>
+    <span class="s0">public static void </span><span class="s1">main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">) {</span>
+        <span class="s1">GameRepository gameRepository </span><span class="s2">= </span><span class="s0">new </span><span class="s1">GameRepository</span><span class="s2">();</span>
+        <span class="s1">UserRepository userRepository </span><span class="s2">= </span><span class="s0">new </span><span class="s1">UserRepository</span><span class="s2">();</span>
+        <span class="s1">CartRepository cartRepository </span><span class="s2">= </span><span class="s0">new </span><span class="s1">CartRepository</span><span class="s2">();</span>
+        <span class="s1">PurchaseRepository purchaseRepository </span><span class="s2">= </span><span class="s0">new </span><span class="s1">PurchaseRepository</span><span class="s2">();</span>
+
+        <span class="s1">Database database </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Database</span><span class="s2">(</span><span class="s1">gameRepository</span><span class="s2">, </span><span class="s1">userRepository</span><span class="s2">);</span>
+        <span class="s1">AdminService adminService </span><span class="s2">= </span><span class="s0">new </span><span class="s1">AdminService</span><span class="s2">(</span><span class="s1">gameRepository</span><span class="s2">, </span><span class="s1">userRepository</span><span class="s2">);</span>
+        <span class="s1">DeveloperService developerService </span><span class="s2">= </span><span class="s0">new </span><span class="s1">DeveloperService</span><span class="s2">(</span><span class="s1">gameRepository</span><span class="s2">);</span>
+        <span class="s1">UserService userService </span><span class="s2">= </span><span class="s0">new </span><span class="s1">UserService</span><span class="s2">(</span><span class="s1">userRepository</span><span class="s2">, </span><span class="s1">gameRepository</span><span class="s2">, </span><span class="s1">cartRepository</span><span class="s2">, </span><span class="s1">purchaseRepository</span><span class="s2">);</span>
+
+        <span class="s1">AdminController adminController </span><span class="s2">= </span><span class="s0">new </span><span class="s1">AdminController</span><span class="s2">(</span><span class="s1">adminService</span><span class="s2">);</span>
+        <span class="s1">DeveloperController developerController </span><span class="s2">= </span><span class="s0">new </span><span class="s1">DeveloperController</span><span class="s2">(</span><span class="s1">developerService</span><span class="s2">);</span>
+        <span class="s1">UserController userController </span><span class="s2">= </span><span class="s0">new </span><span class="s1">UserController</span><span class="s2">(</span><span class="s1">userService</span><span class="s2">, </span><span class="s1">gameRepository</span><span class="s2">);</span>
+
+        <span class="s1">Scanner scanner </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Scanner</span><span class="s2">(</span><span class="s1">System</span><span class="s2">.</span><span class="s1">in</span><span class="s2">);</span>
+        <span class="s1">User currentUser </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+
+        <span class="s0">while </span><span class="s2">(</span><span class="s0">true</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">currentUser </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;1. Register</span><span class="s0">\n</span><span class="s3">2. Login</span><span class="s0">\n</span><span class="s3">3. Exit&quot;</span><span class="s2">);</span>
+                <span class="s0">int </span><span class="s1">choice </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                <span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">1</span><span class="s2">) {</span>
+                    <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter username:&quot;</span><span class="s2">);</span>
+                    <span class="s1">String username </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+                    <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter password:&quot;</span><span class="s2">);</span>
+                    <span class="s1">String password </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+                    <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter role (USER, DEVELOPER):&quot;</span><span class="s2">);</span>
+                    <span class="s1">Role role </span><span class="s2">= </span><span class="s1">Role</span><span class="s2">.</span><span class="s1">valueOf</span><span class="s2">(</span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">toUpperCase</span><span class="s2">());</span>
+                    <span class="s0">int </span><span class="s1">id </span><span class="s2">= </span><span class="s1">userRepository</span><span class="s2">.</span><span class="s1">getAllUsers</span><span class="s2">().</span><span class="s1">size</span><span class="s2">() + </span><span class="s4">1</span><span class="s2">;</span>
+                    <span class="s1">userController</span><span class="s2">.</span><span class="s1">registerUser</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">, </span><span class="s1">role</span><span class="s2">);</span>
+                    <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;User registered successfully.&quot;</span><span class="s2">);</span>
+                <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">2</span><span class="s2">) {</span>
+                    <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter username:&quot;</span><span class="s2">);</span>
+                    <span class="s1">String username </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+                    <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter password:&quot;</span><span class="s2">);</span>
+                    <span class="s1">String password </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+                    <span class="s1">currentUser </span><span class="s2">= </span><span class="s1">userController</span><span class="s2">.</span><span class="s1">login</span><span class="s2">(</span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">);</span>
+                    <span class="s0">if </span><span class="s2">(</span><span class="s1">currentUser </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+                        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Login successful.&quot;</span><span class="s2">);</span>
+                    <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Invalid username or password.&quot;</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">3</span><span class="s2">) {</span>
+                    <span class="s0">break</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s0">switch </span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getRole</span><span class="s2">()) {</span>
+                    <span class="s0">case </span><span class="s1">ADMIN -&gt; </span><span class="s2">{</span>
+                        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;1. Approve Game</span><span class="s0">\n</span><span class="s3">2. Delete Game</span><span class="s0">\n</span><span class="s3">3. Ban User</span><span class="s0">\n</span><span class="s3">4. Unban User</span><span class="s0">\n</span><span class="s3">5. Delete User</span><span class="s0">\n</span><span class="s3">6. List Users</span><span class="s0">\n</span><span class="s3">7. List Games</span><span class="s0">\n</span><span class="s3">8. Logout&quot;</span><span class="s2">);</span>
+                        <span class="s0">int </span><span class="s1">choice </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                        <span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+
+                        <span class="s0">if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">1</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game ID to approve:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">gameId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">approveGame</span><span class="s2">(</span><span class="s1">gameId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">2</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game ID to delete:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">gameId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">deleteGame</span><span class="s2">(</span><span class="s1">gameId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">3</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter user ID to ban:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">userId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">banUser</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">4</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter user ID to unban:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">userId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">unbanUser</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">5</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter user ID to delete:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">userId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">deleteUser</span><span class="s2">(</span><span class="s1">userId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">6</span><span class="s2">) {</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">getAllUsers</span><span class="s2">().</span><span class="s1">forEach</span><span class="s2">(</span><span class="s1">u -&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">u</span><span class="s2">.</span><span class="s1">getUsername</span><span class="s2">() + </span><span class="s3">&quot; - &quot; </span><span class="s2">+ </span><span class="s1">u</span><span class="s2">.</span><span class="s1">getRole</span><span class="s2">()));</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">7</span><span class="s2">) {</span>
+                            <span class="s1">adminController</span><span class="s2">.</span><span class="s1">getAllGames</span><span class="s2">().</span><span class="s1">forEach</span><span class="s2">(</span><span class="s1">g -&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">g</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">() + </span><span class="s3">&quot; - &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getPrice</span><span class="s2">()));</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">8</span><span class="s2">) {</span>
+                            <span class="s1">currentUser </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+                        <span class="s2">}</span>
+                    <span class="s2">}</span>
+                    <span class="s0">case </span><span class="s1">DEVELOPER -&gt; </span><span class="s2">{</span>
+                        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;1. Create Game</span><span class="s0">\n</span><span class="s3">2. List My Games</span><span class="s0">\n</span><span class="s3">3. Delete Game</span><span class="s0">\n</span><span class="s3">4. Logout&quot;</span><span class="s2">);</span>
+                        <span class="s0">int </span><span class="s1">choice </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                        <span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+
+                        <span class="s0">if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">1</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game name:&quot;</span><span class="s2">);</span>
+                            <span class="s1">String name </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game price:&quot;</span><span class="s2">);</span>
+                            <span class="s0">double </span><span class="s1">price </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextDouble</span><span class="s2">();</span>
+                            <span class="s0">int </span><span class="s1">id </span><span class="s2">= </span><span class="s1">gameRepository</span><span class="s2">.</span><span class="s1">getAllGames</span><span class="s2">().</span><span class="s1">size</span><span class="s2">() + </span><span class="s4">1</span><span class="s2">;</span>
+                            <span class="s1">developerController</span><span class="s2">.</span><span class="s1">createGame</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">name</span><span class="s2">, </span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">(), </span><span class="s1">price</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">2</span><span class="s2">) {</span>
+                            <span class="s1">developerController</span><span class="s2">.</span><span class="s1">getGamesByDeveloper</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()).</span><span class="s1">forEach</span><span class="s2">(</span><span class="s1">g -&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">g</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">() + </span><span class="s3">&quot; - &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getPrice</span><span class="s2">()));</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">3</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game ID to delete:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">gameId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">developerController</span><span class="s2">.</span><span class="s1">deleteGame</span><span class="s2">(</span><span class="s1">gameId</span><span class="s2">, </span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">());</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">4</span><span class="s2">) {</span>
+                            <span class="s1">currentUser </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+                        <span class="s2">}</span>
+                    <span class="s2">}</span>
+                    <span class="s0">case </span><span class="s1">USER -&gt; </span><span class="s2">{</span>
+                        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;1. Add to Cart</span><span class="s0">\n</span><span class="s3">2. View Cart</span><span class="s0">\n</span><span class="s3">3. Purchase Games</span><span class="s0">\n</span><span class="s3">4. Remove from Cart</span><span class="s0">\n</span><span class="s3">5. Top Up Balance</span><span class="s0">\n</span><span class="s3">6. View Purchased Games</span><span class="s0">\n</span><span class="s3">7. Logout&quot;</span><span class="s2">);</span>
+                        <span class="s0">int </span><span class="s1">choice </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                        <span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+
+                        <span class="s0">if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">1</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game ID to add to cart:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">gameId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">userController</span><span class="s2">.</span><span class="s1">addToCart</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">(), </span><span class="s1">gameId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">2</span><span class="s2">) {</span>
+                            <span class="s1">userController</span><span class="s2">.</span><span class="s1">getCartGames</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()).</span><span class="s1">forEach</span><span class="s2">(</span><span class="s1">g -&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">g</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">() + </span><span class="s3">&quot; - $&quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getPrice</span><span class="s2">()));</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">3</span><span class="s2">) {</span>
+                            <span class="s1">userController</span><span class="s2">.</span><span class="s1">purchaseGames</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">());</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">4</span><span class="s2">) {</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter game ID to remove from cart:&quot;</span><span class="s2">);</span>
+                            <span class="s0">int </span><span class="s1">gameId </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+                            <span class="s1">userController</span><span class="s2">.</span><span class="s1">removeFromCart</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">(), </span><span class="s1">gameId</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">5</span><span class="s2">) {</span>
+                            <span class="s5">// Top-Up Balance Logic</span>
+                            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s3">&quot;Enter 16-digit card number:&quot;</span><span class="s2">);</span>
+                            <span class="s1">String cardNumber </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+
+                            <span class="s5">// Call UserController to handle top-up balance</span>
+                            <span class="s1">userController</span><span class="s2">.</span><span class="s1">topUpBalance</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">(), </span><span class="s1">cardNumber</span><span class="s2">);</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">6</span><span class="s2">) {</span>
+                            <span class="s1">userController</span><span class="s2">.</span><span class="s1">getPurchasedGames</span><span class="s2">(</span><span class="s1">currentUser</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()).</span><span class="s1">forEach</span><span class="s2">(</span><span class="s1">p -&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">p</span><span class="s2">.</span><span class="s1">getGameId</span><span class="s2">() + </span><span class="s3">&quot; - &quot; </span><span class="s2">+ </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getPurchaseDate</span><span class="s2">()));</span>
+                        <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">7</span><span class="s2">) {</span>
+                            <span class="s1">currentUser </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+                        <span class="s2">}</span>
+                    <span class="s2">}</span>
+
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
