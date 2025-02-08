@@ -1,4 +1,3 @@
-// src/main/java/com/gamelibrary/models/Cart.java
 package com.gamelibrary.models;
 
 public class Cart {
@@ -9,6 +8,7 @@ public class Cart {
         this.userId = userId;
         this.gameId = gameId;
     }
+
 
     public int getUserId() {
         return userId;

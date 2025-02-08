@@ -4,7 +4,6 @@ import com.gamelibrary.models.Game;
 import com.gamelibrary.models.User;
 import com.gamelibrary.repositories.GameRepository;
 import com.gamelibrary.repositories.UserRepository;
-
 import java.util.List;
 
 public class AdminService {
@@ -24,6 +23,14 @@ public class AdminService {
         gameRepository.deleteGame(gameId);
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
+    public List<Game> getAllGames() {
+        return gameRepository.getAllGames();
+    }
+
     public void banUser(int userId) {
         userRepository.banUser(userId);
     }
@@ -34,13 +41,5 @@ public class AdminService {
 
     public void deleteUser(int userId) {
         userRepository.deleteUser(userId);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
-    }
-
-    public List<Game> getAllGames() {
-        return gameRepository.getAllGames();
     }
 }

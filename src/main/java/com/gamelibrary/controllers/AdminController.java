@@ -1,10 +1,6 @@
 package com.gamelibrary.controllers;
 
-import com.gamelibrary.models.Game;
-import com.gamelibrary.models.User;
 import com.gamelibrary.services.AdminService;
-
-import java.util.List;
 
 public class AdminController {
     private final AdminService adminService;
@@ -33,11 +29,11 @@ public class AdminController {
         adminService.deleteUser(userId);
     }
 
-    public List<User> getAllUsers() {
-        return adminService.getAllUsers();
+    public void viewAllUsers() {
+        adminService.getAllUsers().forEach(user -> System.out.println("ID: " + user.getId() + ", Name: " + user.getUsername()));
     }
 
-    public List<Game> getAllGames() {
-        return adminService.getAllGames();
+    public void viewAllGames() {
+        adminService.getAllGames().forEach(game -> System.out.println("ID: " + game.getId() + ", Name: " + game.getName()));
     }
 }

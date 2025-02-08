@@ -1,4 +1,3 @@
-// src/main/java/com/gamelibrary/models/Purchase.java
 package com.gamelibrary.models;
 
 import java.time.LocalDate;

@@ -3,7 +3,6 @@ package com.gamelibrary.services;
 import com.gamelibrary.models.Game;
 import com.gamelibrary.repositories.GameRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class DeveloperService {
@@ -13,13 +12,14 @@ public class DeveloperService {
         this.gameRepository = gameRepository;
     }
 
-    public void createGame(int id, String name, int developerId, double price) {
-        Game game = new Game(id, name, developerId, price, LocalDate.now(), false);
+    public void createGame(Game game) {
         gameRepository.addGame(game);
     }
 
-    public List<Game> getGamesByDeveloper(int developerId) {
-        return gameRepository.getAllGames().stream().filter(g -> g.getDeveloperId() == developerId).toList();
+    public List<Game> viewGamesByDeveloper(int developerId) {
+        return gameRepository.getAllGames().stream()
+                .filter(game -> game.getDeveloperId() == developerId)
+                .toList();
     }
 
     public void deleteGame(int gameId, int developerId) {

@@ -1,6 +1,7 @@
 package com.gamelibrary.controllers;
 
-import com.gamelibrary.models.*;
+import com.gamelibrary.models.Game;
+import com.gamelibrary.models.User;
 import com.gamelibrary.services.UserService;
 
 import java.util.List;
@@ -12,43 +13,54 @@ public class UserController {
         this.userService = userService;
     }
 
-    public void registerUser(int id, String username, String password, Role role) {
-        userService.registerUser(id, username, password, role);
+    public void registerUser(User user) {
+        userService.registerUser(user);
     }
 
-    public User login(String username, String password) {
-        return userService.login(username, password);
+    public User loginUser(String username, String password) {
+        return userService.loginUser(username, password);
     }
 
-    public void addToCart(int userId, int gameId) {
-        userService.addToCart(userId, gameId);
+    public User loginAdmin(String username, String password) {
+        return userService.loginAdmin(username, password);
     }
 
-    public List<Game> getCartGames(int userId) {
-        return userService.getCartGames(userId);
+    public List<Game> viewAllGames() {
+        return userService.viewAllGames();
     }
 
-    public void purchaseGames(int userId) {
-        userService.purchaseGames(userId);
+    public void addToCart(User user, Game game) {
+        userService.addToCart(user, game);
     }
 
-    public void removeFromCart(int userId, int gameId) {
-        userService.removeFromCart(userId, gameId);
+    public void removeFromCart(User user, int gameId) {
+        userService.removeFromCart(user, gameId);
     }
 
-    public void topUpBalance(int userId, double amount, String cardNumber, String cardExpiryDate, String cardCVV) {
-        userService.topUpBalance(userId, amount, cardNumber, cardExpiryDate, cardCVV);
+    public void purchaseGames(User user) {
+        userService.purchaseGames(user);
     }
+    public void topUpBalance(User user, double amount, String cardNumber) {
+        if (cardNumber.length() != 16) {
+            System.out.println("Error: Card number must be 16 digits.");
+            return;
+        }
 
-    public List<Purchase> getPurchasedGames(int userId) {
-        return userService.getPurchasedGames(userId);
-    }
+        char firstDigit = cardNumber.charAt(0);
+        double commissionRate;
 
-    public double getUserBalance(int userId) {
-        return userService.getUserBalance(userId);
-    }
+        if (firstDigit == '4') {
+            commissionRate = 0.05; // Kaspi card
+        } else if (firstDigit == '3') {
+            commissionRate = 0.10; // Visa card
+        } else {
+            System.out.println("Error: Invalid card type. Kaspi cards start with 4 and Visa cards start with 3.");
+            return;
+        }
 
-    public List<Game> getAllGames() {
-        return userService.getAllGames();
+        double commission = amount * commissionRate;
+        double finalAmount = amount - commission;
+        user.setBalance(user.getBalance() + finalAmount);
+        System.out.println("Top-up successful. Commission: " + commission + ". Final amount added: " + finalAmount);
     }
 }

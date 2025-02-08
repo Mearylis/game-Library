@@ -1,84 +1,66 @@
 package com.gamelibrary.services;
 
-import com.gamelibrary.models.*;
-import com.gamelibrary.repositories.*;
+import com.gamelibrary.models.Game;
+import com.gamelibrary.models.Role;
+import com.gamelibrary.models.User;
+import com.gamelibrary.repositories.GameRepository;
+import com.gamelibrary.repositories.UserRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class UserService {
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
-    private final CartRepository cartRepository;
-    private final PurchaseRepository purchaseRepository;
 
-    public UserService(UserRepository userRepository, GameRepository gameRepository, CartRepository cartRepository, PurchaseRepository purchaseRepository) {
+    public UserService(UserRepository userRepository, GameRepository gameRepository) {
         this.userRepository = userRepository;
         this.gameRepository = gameRepository;
-        this.cartRepository = cartRepository;
-        this.purchaseRepository = purchaseRepository;
     }
 
-    public void registerUser(int id, String username, String password, Role role) {
-        User user = new User(id, username, password, role, 0.0, false);
+    public void registerUser(User user) {
         userRepository.addUser(user);
     }
 
-    public User login(String username, String password) {
-        User user = userRepository.getUserByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+    public User loginUser(String username, String password) {
+        return userRepository.getAllUsers().stream()
+                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                .findFirst().orElse(null);
+    }
+
+    public User loginAdmin(String username, String password) {
+        User admin = userRepository.getAllUsers().stream()
+                .filter(user -> user.getRole() == Role.ADMIN)
+                .findFirst().orElse(null);
+        if (admin != null && admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
+            return admin;
         }
         return null;
     }
 
-    public void addToCart(int userId, int gameId) {
-        Cart cart = new Cart(userId, gameId);
-        cartRepository.addToCart(cart);
+    public List<Game> viewAllGames() {
+        return gameRepository.getAllGames().stream()
+                .filter(Game::isApproved)
+                .toList();
     }
 
-    public List<Game> getCartGames(int userId) {
-        List<Cart> carts = cartRepository.getCartByUserId(userId);
-        return carts.stream().map(cart -> gameRepository.getGameById(cart.getGameId())).toList();
+    public void addToCart(User user, Game game) {
+        user.getCart().add(game);
     }
 
-    public void purchaseGames(int userId) {
-        List<Game> cartGames = getCartGames(userId);
-        User user = userRepository.getUserById(userId);
-        for (Game game : cartGames) {
-            if (user.getBalance() >= game.getPrice()) {
-                user.setBalance(user.getBalance() - game.getPrice());
-                Purchase purchase = new Purchase(purchaseRepository.getAllPurchases().size() + 1, userId, game.getId(), LocalDate.now());
-                purchaseRepository.addPurchase(purchase);
-                cartRepository.removeFromCart(userId, game.getId());
-            } else {
-                System.out.println("Insufficient balance for game: " + game.getName());
-            }
+    public void removeFromCart(User user, int gameId) {
+        user.getCart().removeIf(game -> game.getId() == gameId);
+    }
+
+    public void purchaseGames(User user) {
+        List<Game> cart = user.getCart();
+        double total = cart.stream().mapToDouble(Game::getPrice).sum();
+        if (user.deductBalance(total)) {
+            user.getPurchasedGames().addAll(cart);
+            cart.clear();
         }
     }
 
-    public void removeFromCart(int userId, int gameId) {
-        cartRepository.removeFromCart(userId, gameId);
-    }
-
-    public void topUpBalance(int userId, double amount, String cardNumber, String cardExpiryDate, String cardCVV) {
-        User user = userRepository.getUserById(userId);
-        user.setCardNumber(cardNumber);
-        user.setCardExpiryDate(cardExpiryDate);
-        user.setCardCVV(cardCVV);
-        user.setBalance(user.getBalance() + amount);
-    }
-
-    public List<Purchase> getPurchasedGames(int userId) {
-        return purchaseRepository.getPurchasesByUserId(userId);
-    }
-
-    public double getUserBalance(int userId) {
-        User user = userRepository.getUserById(userId);
-        return user.getBalance();
-    }
-
-    public List<Game> getAllGames() {
-        return gameRepository.getAllGames();
+    public void topUpBalance(User user, double amount, String cardType) {
+        user.topUpBalance(amount);
     }
 }

@@ -12,12 +12,13 @@ public class DeveloperController {
         this.developerService = developerService;
     }
 
-    public void createGame(int id, String name, int developerId, double price) {
-        developerService.createGame(id, name, developerId, price);
+    public void createGame(Game game) {
+        developerService.createGame(game);
     }
 
-    public List<Game> getGamesByDeveloper(int developerId) {
-        return developerService.getGamesByDeveloper(developerId);
+    public void viewGamesByDeveloper(int developerId) {
+        List<Game> games = developerService.viewGamesByDeveloper(developerId);
+        games.forEach(game -> System.out.println("ID: " + game.getId() + ", Name: " + game.getName()));
     }
 
     public void deleteGame(int gameId, int developerId) {

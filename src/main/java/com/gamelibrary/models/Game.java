@@ -1,59 +1,37 @@
 package com.gamelibrary.models;
 
-import java.time.LocalDate;
-
 public class Game {
     private int id;
     private String name;
-    private int developerId;
     private double price;
-    private LocalDate creationDate;
     private boolean approved;
-    private LocalDate lastPlayedDate;
+    private int developerId;
+    private String category;
 
-    public Game(int id, String name, int developerId, double price, LocalDate creationDate, boolean approved) {
+    public Game(int id, String name, double price, boolean approved, int developerId, String category) {
         this.id = id;
         this.name = name;
-        this.developerId = developerId;
         this.price = price;
-        this.creationDate = creationDate;
         this.approved = approved;
-        this.lastPlayedDate = LocalDate.now();
+        this.developerId = developerId;
+        this.category = category;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public int getDeveloperId() {
-        return developerId;
-    }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 
-    public double getPrice() {
-        return price;
-    }
+    public boolean isApproved() { return approved; }
+    public void setApproved(boolean approved) { this.approved = approved; }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
+    public int getDeveloperId() { return developerId; }
+    public void setDeveloperId(int developerId) { this.developerId = developerId; }
 
-    public boolean isApproved() {
-        return approved;
-    }
-
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
-
-    public LocalDate getLastPlayedDate() {
-        return lastPlayedDate;
-    }
-
-    public void setLastPlayedDate(LocalDate lastPlayedDate) {
-        this.lastPlayedDate = lastPlayedDate;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 }
