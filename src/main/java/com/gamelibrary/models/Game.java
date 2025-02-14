@@ -1,57 +1,38 @@
 package com.gamelibrary.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
     private int id;
     private String name;
-    private double price;
-    private boolean approved;
     private int developerId;
-    private String category;
-    private List<Integer> ratings;
+    private double price;
+    private double sizeGB;
+    private int ageRestriction;
+    private String genre;
+    private String description;
+    private boolean approved;
 
-    public Game(int id, String name, double price, boolean approved, int developerId, String category) {
+    public Game(int id, String name, int developerId, double price, double sizeGB, int ageRestriction, String genre, String description) {
         this.id = id;
         this.name = name;
-        this.price = price;
-        this.approved = approved;
         this.developerId = developerId;
-        this.category = category;
-        this.ratings = new ArrayList<>();
+        this.price = price;
+        this.sizeGB = sizeGB;
+        this.ageRestriction = ageRestriction;
+        this.genre = genre;
+        this.description = description;
+        this.approved = false; // По умолчанию игра не одобрена
     }
 
-    public int getId() {
-        return id;
-    }
+    // Геттеры и сеттеры
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public int getDeveloperId() { return developerId; }
+    public double getPrice() { return price; }
+    public double getSizeGB() { return sizeGB; }
+    public int getAgeRestriction() { return ageRestriction; }
+    public String getGenre() { return genre; }
+    public String getDescription() { return description; }
+    public boolean isApproved() { return approved; }
 
-    public String getName() {
-        return name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public boolean isApproved() {
-        return approved;
-    }
-
-    public int getDeveloperId() {
-        return developerId;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void addRating(int rating) {
-        ratings.add(rating);
-    }
-
-    public double getAverageRating() {
-        if (ratings.isEmpty()) return 0.0;
-        return ratings.stream().mapToInt(Integer::intValue).average().orElse(0.0);
-    }
+    public void setApproved(boolean approved) { this.approved = approved; }
 }
