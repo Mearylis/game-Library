@@ -13,13 +13,20 @@ public class UserRepository {
         users.add(user);
     }
 
+
     public User getUserById(int id) {
         return users.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
     }
 
     public User getUserByUsername(String username) {
-        return users.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+        return users.stream()
+                .filter(user -> user.getUsername().equalsIgnoreCase(username))
+                .findFirst()
+                .orElse(null);
     }
+
+
+
 
     public List<User> getAllUsers() {
         return users;
@@ -42,4 +49,14 @@ public class UserRepository {
     public void deleteUser(int id) {
         users.removeIf(u -> u.getId() == id);
     }
+
+    public void updateUser(User updatedUser) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId() == updatedUser.getId()) {
+                users.set(i, updatedUser);
+                return;
+            }
+        }
+    }
+
 }

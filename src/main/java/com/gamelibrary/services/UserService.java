@@ -8,6 +8,8 @@ import com.gamelibrary.repositories.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -23,12 +25,22 @@ public class UserService {
     }
 
     public void registerUser(int id, String username, String password, Role role) {
-        User user = new User(id, username, password, role, 0.0, false);
-        userRepository.addUser(user);
+        if (userRepository.getUserByUsername(username) != null) {
+            System.out.println("Error: A user with this username already exists.");
+            return;
+        }
+        User newUser = new User(id, username, password, role, 0.0, false);
+        userRepository.addUser(newUser);
+        System.out.println("User registered successfully.");
     }
 
+
     public User login(String username, String password) {
-        return userRepository.getUserByUsername(username);
+        User user = userRepository.getUserByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        throw new IllegalArgumentException("Invalid username or password.");
     }
 
     public void addToCart(int userId, int gameId) {
@@ -42,34 +54,91 @@ public class UserService {
                 .toList();
     }
 
-    public void purchaseGames(int userId) {
-        List<Cart> cartItems = cartRepository.getCartByUserId(userId);
+    public void purchaseGames(int userId, String cardNumber, String bank) {
         User user = userRepository.getUserById(userId);
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        List<Cart> cartItems = cartRepository.getCartByUserId(userId);
         double totalCost = cartItems.stream()
                 .mapToDouble(c -> gameRepository.getGameById(c.getGameId()).getPrice())
                 .sum();
 
-        if (user.getBalance() >= totalCost) {
-            user.setBalance(user.getBalance() - totalCost);
-            cartItems.forEach(c -> {
-                Purchase purchase = new Purchase(purchaseRepository.getAllPurchases().size() + 1, userId, c.getGameId(), LocalDate.now());
-                purchaseRepository.addPurchase(purchase);
-            });
-            cartRepository.getCartByUserId(userId).clear();
-        } else {
-            System.out.println("Insufficient balance.");
+        if (user.getBalance() < totalCost) {
+            System.out.printf("Insufficient balance. You need %.2f more.%n", totalCost - user.getBalance());
+            return;
         }
+
+        if (cartItems.isEmpty()) {
+            System.out.println("Your cart is empty. Nothing to purchase.");
+            return;
+        }
+
+        user.setBalance(user.getBalance() - totalCost);
+        for (Cart cart : cartItems) {
+            Purchase purchase = new Purchase(
+                    purchaseRepository.getAllPurchases().size() + 1,
+                    userId, cart.getGameId(), LocalDate.now()
+            );
+            purchaseRepository.addPurchase(purchase);
+        }
+
+        cartRepository.getCartByUserId(userId).clear();
+        System.out.println("Purchase successful! Your games are now in your library.");
     }
+
+
+
 
     public void removeFromCart(int userId, int gameId) {
         cartRepository.removeFromCart(userId, gameId);
     }
 
-    public void topUpBalance(int userId, double amount, String cardType) {
+    public void topUpBalance(int userId, double amount, String cardNumber, String cardType) {
+        Scanner scanner = new Scanner(System.in);
+
+//        if (!Validator.validate(cardNumber)) {
+//            System.out.println("Invalid credit card number. Transaction failed.");
+//            return;
+//        }
+
         User user = userRepository.getUserById(userId);
-        double commission = cardType.equals("Visa") ? 0.02 : 0.03;
-        user.setBalance(user.getBalance() + amount * (1 - commission));
+        if (user == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        if (amount <= 0) {
+            System.out.println("Invalid amount. Must be greater than zero.");
+            return;
+        }
+
+        if (!cardType.equalsIgnoreCase("Kaspi") && !cardType.equalsIgnoreCase("Alfa") && !cardType.equalsIgnoreCase("Halyk")) {
+            System.out.println("This platform currently supports only Kaspi Bank, Alfa Bank, and Halyk Bank.");
+            return;
+        }
+
+        double commission;
+        switch (cardType.toLowerCase()) {
+            case "visa" -> commission = 0.02;
+            case "mastercard" -> commission = 0.03;
+            case "american express" -> commission = 0.04;
+            default -> {
+                System.out.println("Unsupported card type. Transaction failed.");
+                return;
+            }
+        }
+
+        double finalAmount = amount * (1 - commission);
+        user.setBalance(user.getBalance() + finalAmount);
+
+        System.out.printf("Balance successfully topped up! New balance: %.2f%n", user.getBalance());
+
+        System.out.println("Your balance has been updated. You can now purchase games!");
     }
+
 
     public List<Purchase> getPurchasedGames(int userId) {
         return purchaseRepository.getPurchasesByUserId(userId);

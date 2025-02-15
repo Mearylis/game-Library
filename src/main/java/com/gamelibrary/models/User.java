@@ -17,6 +17,16 @@ public class User {
         this.banned = banned;
     }
 
+    public User(int id, String username, String password, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.balance = 0.0; // Начальный баланс по умолчанию
+        this.banned = false; // По умолчанию пользователь не заблокирован
+    }
+
+
     public int getId() {
         return id;
     }
