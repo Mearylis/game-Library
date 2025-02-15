@@ -4,30 +4,38 @@ import com.gamelibrary.models.Game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameRepository {
-    private List<Game> games = new ArrayList<>();
+    private final List<Game> games;
+
+    public GameRepository() {
+        this.games = new ArrayList<>();
+    }
 
     public void addGame(Game game) {
         games.add(game);
     }
 
-    public List<Game> getAllGames() {
-        return games;
+    public void deleteGame(int gameId) {
+        games.removeIf(game -> game.getId() == gameId);
     }
 
     public Game getGameById(int id) {
-        return games.stream().filter(g -> g.getId() == id).findFirst().orElse(null);
+        return games.stream().filter(game -> game.getId() == id).findFirst().orElse(null);
     }
 
-    public void approveGame(int id) {
-        Game game = getGameById(id);
-        if (game != null) {
-            game.setApproved(true);
-        }
+    public List<Game> getAllGames() {
+        return new ArrayList<>(games);
     }
 
-    public void deleteGame(int id) {
-        games.removeIf(g -> g.getId() == id);
+    public List<Game> getGamesByDeveloper(int developerId) {
+        return games.stream()
+                .filter(game -> game.getDeveloperId() == developerId)
+                .collect(Collectors.toList());
+    }
+
+    public void approveGame(int gameId) {
+
     }
 }
